@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFF7FB">
+<meta name="format-detection" content="telephone=no,address=no,email=no">
+<meta name="description" content="走累了点一下，找最近的奶茶、公园、洗手间、高铁站；点五角星收藏吃过的好店。不用下载、不用登录。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="瞅瞅附近有啥">
+<meta property="og:description" content="找附近、直接导航、点五角星收藏吃过的好店。">
+<title>瞅瞅附近有啥</title>
+<style>
+:root{
+  --bg:#FFF7FB; --card:#fff; --pink:#F08CB4; --pink-d:#D9628E; --soft:#FDECF4;
+  --line:#F6D8E7; --text:#4B3742; --muted:#AE94A2;
+  --green:#A9E5B4; --green-d:#4E9C65; --green-soft:#EAF9EE;
+  --blue:#8FC9F5; --orange:#FFC48A; --yellow:#FBE28E; --purple:#C9B4F2; --mint:#8FE0D2;
+  --shadow:0 2px 14px rgba(217,120,165,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-size:14px;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1240px;margin:0 auto;padding:20px 20px 70px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+h1{margin:0;font-size:26px;letter-spacing:1px}
+h1 .a{color:var(--pink)} h1 .b{color:var(--green-d)} h1 .c{color:#E9A23B} h1 .d{color:var(--blue)}
+.hbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:9px;padding:9px 14px;cursor:pointer;font-size:13px;font-family:inherit;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--pink);color:var(--pink-d)}
+.btn.green{background:var(--green);border-color:var(--green);color:#245B33;font-weight:700}
+.btn.green:hover{background:#94DCA2;border-color:#94DCA2;color:#1E4B2B}
+.btn.sm{padding:6px 10px;font-size:12px;border-radius:7px}
+select,input,textarea{font-family:inherit;font-size:13px;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:9px;padding:10px 11px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--pink)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.hero{padding:18px 20px 16px;margin-bottom:14px}
+.hero h2{margin:0 0 4px;font-size:17px}
+.hero .tip{margin:0 0 13px;font-size:12px;color:var(--muted);line-height:1.7}
+.scenes{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:10px}
+.scene{border:1.5px solid var(--line);background:#fff;border-radius:13px;padding:13px 8px 12px;cursor:pointer;text-align:center;transition:.16s;font-family:inherit;color:var(--text)}
+.scene:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(217,120,165,.16)}
+.scene .em{display:block;font-size:27px;line-height:1.25;margin-bottom:4px}
+.scene .nm{display:block;font-size:14px;font-weight:700}
+.scene .ds{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.scene.on{border-color:currentColor;box-shadow:0 3px 12px rgba(0,0,0,.07);background:#FFF9FC}
+.scene.c1{color:#D9789F} .scene.c2{color:#5FAE76} .scene.c3{color:#B07D51}
+.scene.c4{color:#5B93C9} .scene.c5{color:#E09A3C} .scene.c6{color:#8A72C4}
+.scene.c7{color:#4FAE9E} .scene.c8{color:#C9705F} .scene.c9{color:#3F8FD0}
+.searchbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.searchbar input{flex:1;min-width:220px}
+.searchbar .btn{padding:10px 18px}
+.shint{font-size:11.5px;color:var(--muted);line-height:1.75;margin:7px 0 0}
+.divider{height:1px;background:var(--line);margin:17px 0 15px}
+.gohead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.gohead h2{margin:0;font-size:17px}
+.destwrap{display:flex;align-items:center;gap:7px;flex:1;min-width:220px;flex-wrap:wrap}
+.destwrap span{font-size:12px;color:var(--muted);white-space:nowrap}
+#dest{flex:1;min-width:150px;max-width:340px;padding:8px 10px;font-size:13px}
+.gobtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px}
+.go{border:1.5px solid transparent;border-radius:13px;padding:13px 12px;cursor:pointer;text-align:left;font-family:inherit;transition:.16s;color:#2A4433}
+.go:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.10)}
+.go b{display:block;font-size:16px;margin-bottom:3px}
+.go small{display:block;font-size:11px;opacity:.78;line-height:1.5}
+.go.walk{background:var(--green);border-color:#96DCA5}
+.go.bike{background:#DCEFFD;border-color:#B7DCF6;color:#2B5C82}
+.go.taxi{background:#FFEBD6;border-color:#F8D2AA;color:#8A5A24}
+.status{margin:0;padding:10px 13px;border-radius:10px;font-size:12px;line-height:1.7}
+.status.info{background:#F1F8FF;border:1px solid #D5E9FA;color:#3A6B96}
+.status.warn{background:#FFF6E8;border:1px solid #F5DFB8;color:#8A6428}
+.status.ok{background:var(--green-soft);border:1px solid #C9EDD3;color:#3F7D52}
+.status[hidden]{display:none}
+.bikebar{margin-top:11px;padding:11px 13px;background:#EEF7FF;border:1px solid #CFE6F8;border-radius:10px;font-size:12px;line-height:1.8;color:#3A6285}
+.bikebar[hidden]{display:none}
+.more{margin:0 0 14px;padding:11px 16px}
+.more summary{cursor:pointer;font-size:13px;color:var(--muted);outline:none}
+.more .srow{margin-top:12px}
+.srow{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.srow .f1{flex:1;min-width:190px}.srow .f2{flex:1.4;min-width:200px}
+.lbl{font-size:11px;color:var(--muted);display:block;margin:0 0 4px 3px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.chips .t{font-size:12px;color:var(--muted);margin-right:2px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:16px;padding:6px 13px;font-size:12px;cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--pink)}
+.tabs{display:flex;gap:8px;margin:16px 0 12px;flex-wrap:wrap;align-items:center}
+.tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:18px;padding:7px 16px;cursor:pointer;font-size:13px;font-family:inherit}
+.tab.active{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
+.tab.note{margin-left:auto;background:transparent;border:0;color:var(--muted);cursor:default;font-size:12px}
+.gomap{display:block;width:100%;background:var(--green);border:1.5px solid #96DCA5;color:#245B33;font-weight:800;font-size:16px;border-radius:13px;padding:15px 12px;cursor:pointer;font-family:inherit;margin-bottom:11px;transition:.16s}
+.gomap:hover{background:#94DCA2;transform:translateY(-1px)}
+.nearby{margin:0 0 11px;padding:12px 15px}
+.nearby h3{margin:0 0 4px;font-size:14px}
+.nearby p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.75}
+.mapbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.mapbar .t{font-size:12px;color:var(--muted);line-height:1.7;flex:1;min-width:190px}
+#mapBox{width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#F7F2F5;position:relative}
+#qqFrame{display:block;width:100%;height:620px;border:0;background:#fff}
+.fab{position:absolute;right:16px;bottom:16px;z-index:5;width:64px;height:64px;border-radius:50%;border:2px solid #fff;background:var(--pink);color:#fff;font-size:25px;line-height:1;box-shadow:0 6px 18px rgba(217,120,165,.45);cursor:pointer;font-family:inherit;padding:8px 0 0}
+.fab small{display:block;font-size:10px;font-weight:700;margin-top:2px}
+.fab:hover{background:var(--pink-d)}
+.note{background:#FFF9FC;border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:12px;line-height:1.85;color:var(--muted);margin-bottom:11px}
+.favbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.favbar input{flex:1;min-width:190px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.photo{height:118px;background:linear-gradient(135deg,#FDECF4,#EAF6FF);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo .ph{font-size:12px;color:#B58FA5;text-align:center;line-height:1.7;padding:10px}
+.photo .ph b{display:block;font-size:26px;color:var(--pink);font-weight:400;margin-bottom:3px}
+.photo .up{position:absolute;right:8px;bottom:8px;font-size:11px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:12px;padding:4px 9px;cursor:pointer;color:var(--pink-d)}
+.photo input[type=file]{display:none}
+.dist{position:absolute;left:8px;top:8px;background:#fff;border-radius:12px;padding:4px 10px;font-size:12px;font-weight:700;box-shadow:0 1px 6px rgba(0,0,0,.10)}
+.pbody{padding:11px 12px 12px;display:flex;flex-direction:column;gap:7px;flex:1}
+.pname{font-weight:700;font-size:14px;line-height:1.4}
+.ptag{align-self:flex-start;font-size:11px;border-radius:5px;padding:2px 8px;color:#6B4A5B;background:var(--soft)}
+.pmeta{font-size:12px;color:var(--muted);line-height:1.6;word-break:break-all}
+.reco{background:#FFF0F6;border-left:4px solid var(--pink);border-radius:8px;padding:9px 11px;font-size:13px;line-height:1.65;color:#8A3B5E;word-break:break-word}
+.reco b{color:var(--pink-d)}
+.reco.empty{background:#FAF7F9;border-left-color:#E5D7E0;color:var(--muted);font-size:12px}
+.pops{display:flex;gap:6px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);line-height:2}
+.empty b{display:block;font-size:32px;color:var(--pink);font-weight:400}
+.modal{position:fixed;inset:0;background:rgba(75,55,66,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal[hidden]{display:none}
+.modal-in{background:#fff;border-radius:16px;padding:20px;width:min(500px,96vw);max-height:88vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.modal-in h2{margin:0 0 12px;font-size:18px}
+.geoline{background:var(--green-soft);border:1px solid #C9EDD3;color:#3F7D52;border-radius:9px;padding:9px 11px;font-size:12px;line-height:1.6;margin-bottom:13px;word-break:break-all}
+.geoline.warn{background:#FFF6E8;border-color:#F5DFB8;color:#8A6428}
+.frow{margin-bottom:12px}
+.frow label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px 3px}
+.frow input,.frow textarea,.frow select{width:100%}
+.frow textarea{resize:vertical;min-height:64px;line-height:1.6}
+.frow .chk{display:flex;align-items:center;gap:7px;color:var(--text);font-size:13px}
+.frow .chk input{width:auto}
+.fhint{font-size:11px;color:var(--muted);line-height:1.7;margin:4px 0 0}
+.mbtns{display:flex;gap:9px;justify-content:flex-end;margin-top:16px}
+.close{float:right;border:0;background:var(--soft);color:var(--pink-d);width:27px;height:27px;border-radius:50%;font-size:18px;cursor:pointer;line-height:1}
+.taxilist{display:grid;gap:9px;margin:12px 0}
+.taxiopt{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;text-align:left;cursor:pointer;font-family:inherit;color:var(--text);transition:.15s}
+.taxiopt:hover{border-color:var(--green-d);background:#F7FCF8}
+.taxiopt b{display:block;font-size:14px;margin-bottom:3px}
+.taxiopt small{display:block;font-size:11px;color:var(--muted);line-height:1.6}
+.taxiopt .tag{float:right;font-size:10px;background:var(--green-soft);color:var(--green-d);border-radius:5px;padding:2px 7px}
+.taxiopt .tag.gray{background:#F3F0F2;color:#8A7E88}
+.adslot{margin:14px 0;text-align:center}
+.adslot[hidden]{display:none}
+.adslot img,.adslot iframe{max-width:100%;border:0;display:block;margin:0 auto;border-radius:10px}
+footer{margin-top:26px;text-align:center;color:#C9B2BD;font-size:12px;line-height:1.9}
+@media(max-width:600px){.wrap{padding:16px 13px 60px}h1{font-size:23px}.gomap{font-size:15px}.fab{width:58px;height:58px;font-size:23px}#qqFrame{height:540px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="a">瞅瞅</span><span class="b">附近</span><span class="c">有</span><span class="d">啥</span> ✿</h1>
+    <div class="hbtns"><button class="btn" id="btnFav">⭐ 收藏一家店</button></div>
+  </header>
+
+  <!-- 广告位预留（默认隐藏、不加载任何第三方脚本）。投放时见 app.js 顶部 ADS 配置 -->
+  <div class="adslot" id="adTop" hidden></div>
+
+  <section class="panel hero">
+    <h2>我现在想…</h2>
+    <p class="tip">点一个，地图立刻按离你从近到远列好。</p>
+    <div class="scenes" id="scenes">
+      <button class="scene c1 on" data-kw="奶茶"><span class="em">🧋</span><span class="nm">喝杯奶茶</span><span class="ds">最近的那家</span></button>
+      <button class="scene c2" data-kw="公园"><span class="em">🌳</span><span class="nm">找地方歇脚</span><span class="ds">公园 / 长椅</span></button>
+      <button class="scene c3" data-kw="咖啡"><span class="em">☕</span><span class="nm">坐下来</span><span class="ds">咖啡 / 茶座</span></button>
+      <button class="scene c4" data-kw="公共厕所"><span class="em">🚻</span><span class="nm">找洗手间</span><span class="ds">着急的时候</span></button>
+      <button class="scene c5" data-kw="便利店"><span class="em">🏪</span><span class="nm">买瓶水</span><span class="ds">便利店</span></button>
+      <button class="scene c6" data-kw="美食"><span class="em">🍜</span><span class="nm">吃点东西</span><span class="ds">附近小馆</span></button>
+      <button class="scene c7" data-kw="地铁站"><span class="em">🚇</span><span class="nm">去坐地铁</span><span class="ds">最近的入口</span></button>
+      <button class="scene c8" data-kw="超市"><span class="em">🛒</span><span class="nm">逛超市</span><span class="ds">顺路补给</span></button>
+      <button class="scene c9" data-kw="高铁站"><span class="em">🚄</span><span class="nm">去高铁站</span><span class="ds">最近的车站</span></button>
+    </div>
+
+    <div class="searchbar">
+      <input id="q" placeholder="想找具体某家店？例如：赵一鸣、蜜雪冰城、某某超市">
+      <button class="btn green" id="btnQ">🔍 搜这家</button>
+    </div>
+    <p class="shint">填品牌名或店名，地图就按这个关键词把附近的店按距离列出来；不填就点上面的按钮。</p>
+
+    <div class="divider"></div>
+
+    <div class="gohead">
+      <h2>想去，怎么走？</h2>
+      <div class="destwrap">
+        <span>去这儿：</span>
+        <input id="dest" value="奶茶" placeholder="想去的店名，留空用上面选的关键词">
+      </div>
+    </div>
+    <div class="gobtns">
+      <button class="go walk" id="btnWalk"><b>🚶 走着去</b><small>直接出路线</small></button>
+      <button class="go bike" id="btnBike"><b>🚲 骑车去</b><small>看附近单车点</small></button>
+      <button class="go taxi" id="btnTaxi"><b>🚗 打车去</b><small>四个平台选一个</small></button>
+    </div>
+    <div class="bikebar" id="bikeBar" hidden>
+      附近共享单车点（按距离排）：<br>
+      <button class="btn sm" id="btnToBike" style="margin-top:8px">🚶 走去最近单车点</button>
+    </div>
+    <div id="status" class="status ok" style="margin-top:11px" hidden></div>
+  </section>
+
+  <details class="panel more" id="moreBox">
+    <summary>⚙ 定位与范围（一般用不到）</summary>
+    <div class="srow">
+      <div class="f2"><span class="lbl">在哪儿找（可留空）</span><input id="addr" style="width:100%" placeholder="留空＝手机自动定位；或填城市名，例如：潮州市"></div>
+      <div><span class="lbl">范围</span><select id="radius"><option value="1000">1 公里</option><option value="2000">2 公里</option><option value="3000" selected>3 公里</option><option value="5000">5 公里</option></select></div>
+      <div><span class="lbl">&nbsp;</span><button class="btn" id="btnLocate">直接定位</button></div>
+      <div><span class="lbl">&nbsp;</span><button class="btn green" id="btnSearch">重新瞅瞅</button></div>
+    </div>
+    <div class="chips">
+      <span class="t">更多关键词：</span>
+      <span class="chip" data-k="美食">🍜 美食</span>
+      <span class="chip" data-k="药店">💊 药店</span>
+      <span class="chip" data-k="快递">📦 快递</span>
+      <span class="chip" data-k="共享单车">🚲 共享单车</span>
+      <span class="chip" data-k="停车场">🅿 停车场</span>
+    </div>
+  </details>
+
+  <nav class="tabs">
+    <button class="tab active" data-v="map">附近地图 · 实时</button>
+    <button class="tab" data-v="cards">⭐ 我的收藏</button>
+    <span class="tab note" id="count">实时结果在地图里</span>
+  </nav>
+
+  <div id="viewMap">
+    <button class="gomap" id="btnGoMap">🧭 去最近的「奶茶」· 点一下直接导航</button>
+
+    <section class="panel nearby" id="nearbyPanel">
+      <h3 id="nearbyTitle">附近还有哪些「奶茶」</h3>
+      <p id="nearbyDesc">下面这张腾讯地图结果页，就是按距离从近到远排好的附近店铺清单（店名、距离、评分都在里面）。点「在新窗口打开 ↗」能看完整清单并直接点任一家的「去这里」。</p>
+      <div class="chips" id="radiusChips"><span class="t">换范围：</span></div>
+      <div class="chips" id="relatedChips"></div>
+    </section>
+
+    <div class="mapbar">
+      <span class="t" id="frameMeta">正在打开附近结果…</span>
+      <button class="btn sm" id="btnReload">刷新结果</button>
+      <button class="btn green" id="btnOpenNew">在新窗口打开 ↗</button>
+    </div>
+    <div id="mapBox">
+      <iframe id="qqFrame" src="about:blank" title="腾讯地图附近搜索结果" loading="eager" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-downloads"></iframe>
+      <button class="fab" id="btnFavMap" title="收藏这家店">⭐<small>收藏</small></button>
+    </div>
+  </div>
+
+  <div id="layoutCards" hidden>
+    <div class="favbar">
+      <input id="favSearch" placeholder="搜店名 / 什么好吃 / 地址">
+      <button class="btn green" id="btnFavNew">⭐ 收藏一家店</button>
+    </div>
+    <div class="cards" id="cards"></div>
+  </div>
+
+  <div class="adslot" id="adBottom" hidden></div>
+
+  <footer>数据来自腾讯地图 · 不用下载、不用登录</footer>
+</div>
+
+<div id="favModal" class="modal" hidden>
+  <div class="modal-in">
+    <button class="close" id="favClose">×</button>
+    <h2 id="favTitle">⭐ 记下这家好吃的</h2>
+    <div class="geoline" id="favGeo">📍 正在记下当前位置…</div>
+    <div class="frow"><label>店名 *</label><input id="fName" placeholder="照着地图上的店名填一下"></div>
+    <div class="frow"><label>什么好吃 / 好喝</label><textarea id="fReco" placeholder="例如：芋泥啵啵、冰美式、靠窗那个位置"></textarea></div>
+    <div class="frow"><label>位置备注（选填）</label><input id="fAddr" placeholder="例如：某某路 / 某某商场旁边"></div>
+    <div class="frow"><label>类型</label><select id="fCat">
+      <option>奶茶</option><option>咖啡</option><option>美食</option><option>甜品</option><option>便利店</option><option>公园</option><option>其他</option>
+    </select></div>
+    <div class="frow"><label class="chk"><input type="checkbox" id="fAgain" checked> 下次还想去</label></div>
+    <p class="fhint">位置来自手机定位，会自动记下；店名照地图填一下 —— 工作台读不到腾讯页面里的店名。</p>
+    <div class="mbtns">
+      <button class="btn" id="favCancel">取消</button>
+      <button class="btn green" id="favSave">⭐ 收藏</button>
+    </div>
+  </div>
+</div>
+
+<div id="taxiModal" class="modal" hidden>
+  <div class="modal-in">
+    <button class="close" id="taxiClose">×</button>
+    <h2>🚗 打车去「<span id="taxiDest">奶茶</span>」</h2>
+    <div class="geoline" id="taxiHint">已把目的地复制好，打开后粘到「终点」就行。</div>
+    <div class="taxilist">
+      <button class="taxiopt" data-taxi="amap"><span class="tag">网页版</span><b>高德打车</b><small>官方网页版，实测可直接打开；聚合多个平台比价</small></button>
+      <button class="taxiopt" data-taxi="didi"><span class="tag">网页版</span><b>滴滴打车</b><small>官方网页版，实测可直接打开</small></button>
+      <button class="taxiopt" data-taxi="hello"><span class="tag gray">小程序</span><b>哈啰打车</b><small>没有公开网页版：点一下打开哈啰官网，并复制小程序名；微信里搜「哈啰打车」即可</small></button>
+      <button class="taxiopt" data-taxi="tencent"><span class="tag gray">小程序</span><b>腾讯出行服务（腾讯打车）</b><small>只有微信小程序：点一下复制名称，在微信「我 → 服务 → 出行服务」或搜索小程序打开</small></button>
+    </div>
+    <p class="fhint">如实说明：普通网页无法直接拉起微信小程序（需要微信认证公众号的开放标签或平台下发的链接）。能打开的网页版已经帮你打开；小程序类给你名称和微信内路径，不编造跳转链接。</p>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
